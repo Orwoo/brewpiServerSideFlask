@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>fermPI</title>
+{% endblock %}
+
+{% block body %}
+<div class="content"></div>
+    <h1 style="text-align: center">Fermentation Temperature Control</h1>
+    {% if temps|length < 1 %}
+    <h4 style="text-align: center">There are no temperatures stored yet. Check if Client is up.</h4>
+    {% else %}
+    <table>
+        <tr>
+            <th>Timestamp</th>
+            <th>Temp.inner</th>
+            <th>Temp.outer</th>
+            <th>Temp.set</th>
+        </tr>
+        {% for temp in temps %}
+            <tr>
+                <td>{{ temp.timestamp.strftime("%d-%m-%Y,%H:%M:%S") }}</td>
+                <td>{{ temp.temp_inner }}</td>
+                <td>{{ temp.temp_outer }}</td>
+                <td>{{ temp.temp_set }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+
+    <br><br>
+
+    <form action="/brewpi/update-set-temp" method="POST">
+        <table>
+            <tr>
+                <th>Parameter</th>
+                <th>Value</th>
+                <th>Set new Value</th>
+            </tr>
+            <tr>
+                <td>temp_set</td>
+                <td>{{ set_temps.temp_set }}</td>
+                <td><input type="number" min="0" step=".5" name="temp_set" id="temp_set" value="{{ set_temps.temp_set }}"></td>
+
+            </tr>
+            <tr>
+                <td>th_set</td>
+                <td>{{ set_temps.th_set }}</td>
+                <td><input type="number" min="0" step=".5" name="th_set" id="th_set" value="{{ set_temps.th_set }}"></td>
+
+            </tr>
+            <tr>
+                <td>th_outer</td>
+                <td>{{ set_temps.th_outer }}</td>
+                <td><input type="number" min="0" step=".5" name="th_outer" id="th_outer" value="{{ set_temps.th_outer }}"></td>
+
+            </tr>
+            <tr class="no-border">
+                <td></td>
+                <td></td>
+                <td><input type="submit", value="Set Temps"></td>
+            </tr>
+        </table>
+    </form>
+{% endblock %}
