@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Login - fermPI</title>
+{% endblock %}
+
+{% block body %}
+    <div class="content">
+    <h1>FermPi - Login</h1>
+
+    <form action="/login" method="POST">
+        <div id="creds">
+            Username<br>
+            <input type="text" name="user" id="user"><br>
+            Password<br>
+            <input type="password" name="password" id="password"><br>
+            <input type="submit" value="Login">
+        </div>
+
+    </form>
+    </div>
+
+{% endblock %}

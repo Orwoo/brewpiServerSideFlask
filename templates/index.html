@@ -29,37 +29,43 @@
     {% endif %}
 
     <br><br>
+    <div class="ctn1">
+        <form action="/fermpi/update-set-temp" method="POST">
+            <table>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Value</th>
+                    <th>Set new Value</th>
+                </tr>
+                <tr>
+                    <td>temp_set</td>
+                    <td>{{ set_temps.temp_set }}</td>
+                    <td><input type="number" min="0" step=".5" name="temp_set" id="temp_set" value="{{ set_temps.temp_set }}"></td>
 
-    <form action="/brewpi/update-set-temp" method="POST">
-        <table>
-            <tr>
-                <th>Parameter</th>
-                <th>Value</th>
-                <th>Set new Value</th>
-            </tr>
-            <tr>
-                <td>temp_set</td>
-                <td>{{ set_temps.temp_set }}</td>
-                <td><input type="number" min="0" step=".5" name="temp_set" id="temp_set" value="{{ set_temps.temp_set }}"></td>
+                </tr>
+                <tr>
+                    <td>th_set</td>
+                    <td>{{ set_temps.th_set }}</td>
+                    <td><input type="number" min="0" step=".5" name="th_set" id="th_set" value="{{ set_temps.th_set }}"></td>
 
-            </tr>
-            <tr>
-                <td>th_set</td>
-                <td>{{ set_temps.th_set }}</td>
-                <td><input type="number" min="0" step=".5" name="th_set" id="th_set" value="{{ set_temps.th_set }}"></td>
+                </tr>
+                <tr>
+                    <td>th_outer</td>
+                    <td>{{ set_temps.th_outer }}</td>
+                    <td><input type="number" min="0" step=".5" name="th_outer" id="th_outer" value="{{ set_temps.th_outer }}"></td>
 
-            </tr>
-            <tr>
-                <td>th_outer</td>
-                <td>{{ set_temps.th_outer }}</td>
-                <td><input type="number" min="0" step=".5" name="th_outer" id="th_outer" value="{{ set_temps.th_outer }}"></td>
+                </tr>
+                <tr class="no-border">
+                    <td></td>
+                    <td></td>
+                    <td><input type="submit", value="Set Temps"></td>
+                </tr>
+            </table>
+        </form>
+        <br>
+        <form action="/logout" class="sub-btn">
+            <input type="submit" value="Logout">
+        </form>
+    </div>
 
-            </tr>
-            <tr class="no-border">
-                <td></td>
-                <td></td>
-                <td><input type="submit", value="Set Temps"></td>
-            </tr>
-        </table>
-    </form>
 {% endblock %}
