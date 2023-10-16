@@ -45,10 +45,11 @@ def internal_server_error(e):
 # define db
 class Temperature(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow())
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
     temp_inner = db.Column(db.Float, nullable=False)
     temp_outer = db.Column(db.Float, nullable=False)
     temp_set = db.Column(db.Float, nullable=False)
+    controller_state_client = db.Column(db.String, nullable=False)
 
     def __repr__(self):
         return f"<New Temp.Record: {self.id}|{self.temp_inner}|{self.temp_outer}|{self.temp_set}"
@@ -65,6 +66,7 @@ class TempSet(db.Model):
     temp_set = db.Column(db.Float, nullable=False)
     th_set = db.Column(db.Float, nullable=False)
     th_outer = db.Column(db.Float, nullable=False)
+    controller_state = db.Column(db.String, nullable=False)
 
 
 class Creds(db.Model):
@@ -108,7 +110,8 @@ def fermpi():  # put application's code here
 @app.route('/fermpi/get-set-temp', methods=['GET'])
 def get_set_temp():
     temp_set_value = TempSet.query.first()
-    return f"{temp_set_value.temp_set},{temp_set_value.th_set},{temp_set_value.th_outer}".encode()
+    return (f"{temp_set_value.temp_set},{temp_set_value.th_set},{temp_set_value.th_outer},"
+            f"{temp_set_value.controller_state}").encode()
 
 
 # Route to which the client posts its present fermentation temps to the server
@@ -116,7 +119,8 @@ def get_set_temp():
 def temp_client():
     try:
         data = request.json
-        temp = Temperature(temp_inner=data['temp_inner'], temp_outer=data['temp_outer'], temp_set=data['temp_set'])
+        temp = Temperature(temp_inner=data['temp_inner'], temp_outer=data['temp_outer'], temp_set=data['temp_set'],
+                           controller_state_client=data['controller_state_client'])
         db.session.add(temp)
         db.session.commit()
     except Exception as e:
@@ -132,6 +136,7 @@ def update_set_temp():
         update_temps.temp_set = request.form['temp_set']
         update_temps.th_set = request.form['th_set']
         update_temps.th_outer = request.form['th_outer']
+        update_temps.controller_state = request.form['on-off']
     except BadRequestKeyError as e:
         send_email(e)
         print("Getting Temps form db failed. ")
@@ -165,8 +170,5 @@ def logout():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
-    # in terminal, if port not open: flask run --host=0.0.0.0 --port=5000 --debug
-
-# TODO: get it all to work on the server
-# TODO: set file ownership on production server
+    app.run()
+    # in terminal, if port not open: flask run --host=0.0.0.0 --port=443 --debug

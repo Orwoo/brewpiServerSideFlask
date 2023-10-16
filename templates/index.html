@@ -16,6 +16,7 @@
             <th>Temp.inner</th>
             <th>Temp.outer</th>
             <th>Temp.set</th>
+            <th>Controller State</th>
         </tr>
         {% for temp in temps %}
             <tr>
@@ -23,6 +24,7 @@
                 <td>{{ temp.temp_inner }}</td>
                 <td>{{ temp.temp_outer }}</td>
                 <td>{{ temp.temp_set }}</td>
+                <td>{{ temp.controller_state_client }}</td>
             </tr>
         {% endfor %}
     </table>
@@ -55,10 +57,18 @@
                     <td><input type="number" min="0" step=".5" name="th_outer" id="th_outer" value="{{ set_temps.th_outer }}"></td>
 
                 </tr>
-                <tr class="no-border">
-                    <td></td>
-                    <td></td>
-                    <td><input type="submit", value="Set Temps"></td>
+                <tr>
+                    <td>Controller State</td>
+                    {% if  set_temps.controller_state == "on" %}
+                        <td style="color: green;">{{ set_temps.controller_state }}</td>
+                    {% else %}
+                        <td style="color: red;">{{ set_temps.controller_state }}</td>
+                    {%  endif %}
+                    <td><select id="on-off" name="on-off">
+                            <option value="on">ON</option>
+                            <option value="off">OFF</option>
+                        </select>
+                        <input type="submit", value="Set"></td>
                 </tr>
             </table>
         </form>

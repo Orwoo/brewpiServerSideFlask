@@ -17,7 +17,7 @@ def populate_db():
     # init table TempSet
     if not TempSet.query.count() > 0:
         try:
-            init_temps = TempSet(temp_set=18, th_set=1, th_outer=5)
+            init_temps = TempSet(temp_set=18, th_set=1, th_outer=5, controller_state="off")
             db.session.add(init_temps)
             db.session.commit()
             print("INIT TEMPS CREATED")
